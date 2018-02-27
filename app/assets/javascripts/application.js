@@ -32,4 +32,18 @@ $(document).on('turbolinks:load', function() {
     return SetRatingStar();
   });
   SetRatingStar();
+
+  function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+  }
+  function showPosition(position) {
+    $('#user_latitude').val(position.coords.latitude);
+    $('#user_longitude').val(position.coords.longitude);
+  }
+  getLocation()
 });
+
