@@ -12,4 +12,24 @@
 //
 //= require rails-ujs
 //= require turbolinks
+//= require jquery
+//= require bootstrap-sprockets
 //= require_tree .
+
+$(document).on('turbolinks:load', function() {
+  var $star_rating = $('.rate1');
+  var SetRatingStar = function() {
+    return $star_rating.each(function() {
+      if (parseInt($('#rating_point').val()) >= parseInt($(this).data('rating'))) {
+        return $(this).removeClass('btn-default').addClass('btn-warning');
+      } else {
+        return $(this).removeClass('btn-warning').addClass('btn-default');
+      }
+    });
+  };
+  $star_rating.on('click', function() {
+    $('#rating_point').val($(this).data('rating'));
+    return SetRatingStar();
+  });
+  SetRatingStar();
+});

@@ -16,6 +16,7 @@ ActiveRecord::Schema.define(version: 20180227070135) do
     t.integer "user_id"
     t.integer "movie_id"
     t.text "comment"
+    t.integer "parent_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["movie_id"], name: "index_commenters_on_movie_id"
@@ -64,6 +65,7 @@ ActiveRecord::Schema.define(version: 20180227070135) do
     t.datetime "last_sign_in_at"
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
+    t.boolean "is_admin", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true

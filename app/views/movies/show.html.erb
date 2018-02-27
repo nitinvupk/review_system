@@ -1,15 +1,94 @@
 <h1>Movie <%= @movie.dvd_title%> </h1>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-7">
+      <hr/>
+      <div class="review-block">
+        <% @movie.reviewers.each do |reviewer|%>
+          <div class="row">
+            <div class="col-sm-3">
+              <div class="review-block-name"><a href="#"><%= reviewer.user.email %></a></div>
+            </div>
+            <div class="col-sm-9">
+              <div class="review-block-rate">
+                <%if reviewer.rating_point == 0 %>
+                  <h3> No rating point </h3>
+                <%else%>
+                  <% (1..reviewer.rating_point.to_i).each do |val|%>
+                    <button type="button" class="btn btn-warning btn-xs" aria-label="Left Align" data-rating="<%= val%>">
+                      <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                    </button>
+                  <% end %>
+                  <% (reviewer.rating_point.to_i+1..10).each do |val|%>
+                    <button type="button" class="btn btn-default btn-grey btn-xs" aria-label="Left Align" data-rating="<%= val%>">
+                      <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                    </button>
+                  <% end %>
+                <%end%>
+              </div>
+              <% @movie.commenters.where(user: reviewer.user).each do |commenter|%>
+                <div class="review-block-description"><%= commenter.comment%></div>
+                <div class="review-block-date"><%= commenter.created_at.strftime('%b %d, %Y')%><br/></div>
+                <% commenter.reply.each do |reply| %>
+                  <div class="review-block-description"><%= reply.comment%></div>
+                  <div class="review-block-date"><%= reply.created_at.strftime('%b %d, %Y')%><br/></div>
+                  <div class="review-block-date"><%= reply.user.email %><br/></div>
+                <% end %>
+                <% if current_user.is_admin || commenter.user == current_user %>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <%= form_tag reply_comment_movie_path(@movie), multipart: true, class: 'form-inline' do %>
+                        <%= hidden_field_tag :parent_comment_id, commenter.id %>
+                        <%= text_area_tag :comment, '', class: "pb-cmnt-textarea-reply", placeholder: 'Write comment here!' %>
+                        <%= submit_tag "Submit", class: "btn btn-primary pull-right" %>
+                      <% end %>
+                    </div>
+                  </div>
+                <%end%>
+              <% end %>
+            </div>
+          </div>
+        <%end%>
+        <hr/>
+      </div>
+    </div>
+  </div>
+</div> <!-- /container -->
 
 
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="review-block-rate">
+        <% (1..10).each do |val|%>
+          <button type="button" class="btn btn-warning btn-xs rate1" aria-label="Left Align" data-rating="<%= val%>">
+            <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+          </button>
+        <% end %>
+      </div>
+      <input type="hidden" name="whatever1" class="rating-value rate1" value="0">
+      <%= form_tag add_review_movie_path(@movie), multipart: true do %>
+        <%= hidden_field_tag :rating_point, 0, class: "rating-value rate1" %>
+        <%= submit_tag "Submit" , class: "btn btn-primary pull-right"%>
+      <% end %>
+    </div>
+  </div>
+</div>
 
-<h2>Add Review</h2>
-<%= form_tag add_review_movie_path(@movie), multipart: true do %>
-  <%= text_field_tag :rating_point %>
-  <%= submit_tag "Submit" %>
-<% end %>
+<div class="container pb-cmnt-container">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-info">
+        <div class="panel-body">
+          <%= form_tag add_comment_movie_path(@movie), multipart: true, class: 'form-inline' do %>
+            <%= text_area_tag :comment, '', class: "pb-cmnt-textarea", placeholder: 'Write comment here!' %>
+            <%= submit_tag "Submit", class: "btn btn-primary pull-right" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-<h2>Add Comment</h2>
-<%= form_tag add_comment_movie_path(@movie), multipart: true do %>
-  <%= text_field_tag :comment %>
-  <%= submit_tag "Submit" %>
-<% end %>
+<style>
+</style>

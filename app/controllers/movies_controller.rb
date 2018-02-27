@@ -3,7 +3,7 @@ class MoviesController < ApplicationController
   # GET /movies
   # GET /movies.json
   def index
-    @movies = Movie.all
+    @movies = Movie.paginate(page: params[:page], per_page: 10)
 
     respond_to do |format|
       format.html
@@ -30,9 +30,9 @@ class MoviesController < ApplicationController
 
   def add_review
     @movie = Movie.find(params[:id])
-    @reviewer = @movie.reviewers.new(user: current_user, rating_point: params[:rating_point])
+    @reviewer = Reviewer.where(user: current_user, movie: @movie).first_or_create
     respond_to do |format|
-      if @reviewer.save
+      if @reviewer.update(rating_point: params[:rating_point])
         format.html { redirect_to @movie, notice: 'Product was successfully created.' }
         format.json { render json: @movie, status: :created, location: @movie }
       else
@@ -45,6 +45,26 @@ class MoviesController < ApplicationController
   def add_comment
     @movie = Movie.find(params[:id])
     @commenter = @movie.commenters.new(user: current_user, comment: params[:comment])
+    @reviewer = Reviewer.where(user: current_user, movie: @movie).first_or_initialize
+    unless @reviewer.persisted?
+      @reviewer.rating_point =  0
+      @reviewer.save!(validate: false)
+    end
+    respond_to do |format|
+      if @commenter.save
+        format.html { redirect_to @movie, notice: 'Product was successfully created.' }
+        format.json { render json: @movie, status: :created, location: @movie }
+      else
+        format.html { render action: "show" }
+        format.json { render json: @commenter.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def reply_comment
+    @movie = Movie.find(params[:id])
+    @parent_commenter = Commenter.find(params[:parent_comment_id])
+    @commenter = Commenter.new(user: current_user, parent_id: @parent_commenter.id, comment: params[:comment])
     respond_to do |format|
       if @commenter.save
         format.html { redirect_to @movie, notice: 'Product was successfully created.' }

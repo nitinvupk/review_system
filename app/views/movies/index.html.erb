@@ -1,53 +1,61 @@
-<h2>Import Movies</h2>
-<%= form_tag import_movies_path, multipart: true do %>
-  <%= file_field_tag :file %>
-  <%= submit_tag "Import" %>
-<% end %>
-
-
-
-<table style="width:100%">
-  <tr>
-    <th>DVD Title</th>
-    <th>Studio</th>
-    <th>Released</th>
-    <th>Status</th>
-    <th>Sound</th>
-    <th>Versions</th>
-    <th>Price</th>
-    <th>Rating</th>
-    <th>Year</th>
-    <th>Genre</th>
-    <th>Aspect</th>
-    <th>UPC</th>
-    <th>DVDv Release Date</th>
-    <th>Movie Id</th>
-    <th>Timestamp</th>
-    <th>Updated</th>
-    <th>Action</th>
-  </tr>
-
-  <% @movies.each do |movie| %>
-    <tr>
-      <td> <%= movie.dvd_title%> </td>
-      <td> <%= movie.studio%> </td>
-      <td> <%= movie.released %> </td>
-      <td> <%= movie.status%> </td>
-      <td> <%= movie.sound%> </td>
-      <td> <%= movie.versions%> </td>
-      <td> <%= movie.price%> </td>
-      <td> <%= movie.rating%> </td>
-      <td> <%= movie.year%> </td>
-      <td> <%= movie.genre%> </td>
-      <td> <%= movie.aspect%> </td>
-      <td> <%= movie.upc%> </td>
-      <td> <%= movie.dvd_release_date%> </td>
-      <td> <%= movie.movie_id%> </td>
-      <td> <%= movie.timestamp%> </td>
-      <td> <%= movie.updated%> </td>
-      <td> <%= link_to 'show', movie_path(movie) %> </td>
-    </tr>
+<% if current_user.is_admin %>
+  <h2>Import Movies</h2>
+  <%= form_tag import_movies_path, multipart: true, class: "form-inline pull-left" do %>
+     <div class="form-group">
+      <%= file_field_tag :file, class:"form-control"%>
+    </div>
+    <%= submit_tag "Import", class: "btn btn-primary" %>
   <% end %>
-</table>
+<% end %>
+<div class="pull-right">
+  <%= will_paginate @movies %>
+</div>
+<div class="clearfix">
+</div>
+<h2>Movies</h2>
+<div class="table-responsive">
 
+  <table class="table table-striped table-bordered">
+    <tr>
+      <th>DVD Title</th>
+      <th>Studio</th>
+      <th>Released</th>
+      <th>Status</th>
+      <th>Sound</th>
+      <th>Versions</th>
+      <th>Price</th>
+      <th>Rating</th>
+      <th>Year</th>
+      <th>Genre</th>
+      <th>Aspect</th>
+      <th>UPC</th>
+      <th>DVDv Release Date</th>
+      <th>Movie Id</th>
+      <th>Timestamp</th>
+      <th>Updated</th>
+      <th>Action</th>
+    </tr>
 
+    <% @movies.each do |movie| %>
+      <tr>
+        <td> <%= movie.dvd_title%> </td>
+        <td> <%= movie.studio%> </td>
+        <td> <%= movie.released %> </td>
+        <td> <%= movie.status%> </td>
+        <td> <%= movie.sound%> </td>
+        <td> <%= movie.versions%> </td>
+        <td> <%= movie.price%> </td>
+        <td> <%= movie.rating%> </td>
+        <td> <%= movie.year%> </td>
+        <td> <%= movie.genre%> </td>
+        <td> <%= movie.aspect%> </td>
+        <td> <%= movie.upc%> </td>
+        <td> <%= movie.dvd_release_date%> </td>
+        <td> <%= movie.movie_id%> </td>
+        <td> <%= movie.timestamp%> </td>
+        <td> <%= movie.updated%> </td>
+        <td> <%= link_to 'show', movie_path(movie) %> </td>
+      </tr>
+    <% end %>
+  </table>
+</div>

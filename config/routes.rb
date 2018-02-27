@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       post :import
     end
     member do
+      post :reply_comment
       post :add_review
       post :add_comment
     end
