@@ -1,0 +1,15 @@
+<h1>Movie <%= @movie.dvd_title%> </h1>
+
+
+
+<h2>Add Review</h2>
+<%= form_tag add_review_movie_path(@movie), multipart: true do %>
+  <%= text_field_tag :rating_point %>
+  <%= submit_tag "Submit" %>
+<% end %>
+
+<h2>Add Comment</h2>
+<%= form_tag add_comment_movie_path(@movie), multipart: true do %>
+  <%= text_field_tag :comment %>
+  <%= submit_tag "Submit" %>
+<% end %>
