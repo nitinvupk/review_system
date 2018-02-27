@@ -25,7 +25,7 @@ class MoviesController < ApplicationController
   def import
     Movie.import(params[:file])
 
-    redirect_to root_url, notice: 'Products imported.'
+    redirect_to root_url, notice: 'Movies imported.'
   end
 
   def add_review
@@ -33,7 +33,7 @@ class MoviesController < ApplicationController
     @reviewer = Reviewer.where(user: current_user, movie: @movie).first_or_create
     respond_to do |format|
       if @reviewer.update(rating_point: params[:rating_point])
-        format.html { redirect_to @movie, notice: 'Product was successfully created.' }
+        format.html { redirect_to @movie, notice: 'Review added.' }
         format.json { render json: @movie, status: :created, location: @movie }
       else
         format.html { render action: "show" }
@@ -52,7 +52,7 @@ class MoviesController < ApplicationController
     end
     respond_to do |format|
       if @commenter.save
-        format.html { redirect_to @movie, notice: 'Product was successfully created.' }
+        format.html { redirect_to @movie, notice: 'Comment added.' }
         format.json { render json: @movie, status: :created, location: @movie }
       else
         format.html { render action: "show" }
@@ -67,7 +67,7 @@ class MoviesController < ApplicationController
     @commenter = Commenter.new(user: current_user, parent_id: @parent_commenter.id, comment: params[:comment])
     respond_to do |format|
       if @commenter.save
-        format.html { redirect_to @movie, notice: 'Product was successfully created.' }
+        format.html { redirect_to @movie, notice: 'successfully created.' }
         format.json { render json: @movie, status: :created, location: @movie }
       else
         format.html { render action: "show" }

@@ -17,7 +17,7 @@
 //= require_tree .
 
 $(document).on('turbolinks:load', function() {
-  var $star_rating = $('.rate1');
+  var $star_rating = $('.rate');
   var SetRatingStar = function() {
     return $star_rating.each(function() {
       if (parseInt($('#rating_point').val()) >= parseInt($(this).data('rating'))) {
@@ -40,7 +40,7 @@ $(document).on('turbolinks:load', function() {
         x.innerHTML = "Geolocation is not supported by this browser.";
     }
   }
-  function showPosition(position) {
+  function setPosition(position) {
     $('#user_latitude').val(position.coords.latitude);
     $('#user_longitude').val(position.coords.longitude);
   }
