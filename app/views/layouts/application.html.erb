@@ -12,6 +12,11 @@
     <nav class="navbar navbar-inverse">
       <div class="container">
         <div id="navbar">
+          <ul class="nav navbar-nav">
+            <% if user_signed_in? %>
+              <li><%= link_to 'Movies', movies_path %></li>
+            <% end %>
+          </ul>
           <ul class="nav navbar-nav pull-right">
             <% if user_signed_in? %>
               <li class="dropdown">
